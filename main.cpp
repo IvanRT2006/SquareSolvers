@@ -6,7 +6,7 @@
 
 const double eps = 1e-9;
 
-void LinealEquation(double b, double c);
+void LinearEquation(double b, double c);
 void QuadroEquation(double a, double b, double c);
 bool CompareEqual(double a, double b);
 bool CompareMore(double a, double b);
@@ -23,7 +23,7 @@ int main()
     {
         if (CompareEqual(a,0) == true)
         {
-            LinealEquation(b, c);
+            LinearEquation(b, c);
             continue;
         }
         else
@@ -38,7 +38,7 @@ int main()
     return 0;
 }
 
-void LinealEquation(double b, double c)
+void LinearEquation(double b, double c)
 {
     if (CompareEqual(b, 0) == true)
     {
@@ -46,13 +46,11 @@ void LinealEquation(double b, double c)
         {
             printf("Solvers in this equation don't have borders\n");
         }
-
         else
         {
             printf("Not solvers in this equation\n");
         }
     }
-
     else
     {
         printf("Lineal Equation! Only one root %lf\n", -c / b);
@@ -97,7 +95,6 @@ bool CompareEqual(double a, double b)
     {
         return true;
     }
-
     else
     {
         return false;
@@ -110,7 +107,6 @@ bool CompareMore(double a, double b)
     {
         return true;
     }
-
     else
     {
         return false;
