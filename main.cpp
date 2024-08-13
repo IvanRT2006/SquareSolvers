@@ -55,7 +55,7 @@ void LinealEquation(double b, double c)
 
     else
     {
-        printf("Lineal Equation! Only one root %lf\n", -c/b);
+        printf("Lineal Equation! Only one root %lf\n", -c / b);
     }
 
     printf("Enter other coefficients:\n");
@@ -116,4 +116,3 @@ bool CompareMore(double a, double b)
         return false;
     }
 }
-
