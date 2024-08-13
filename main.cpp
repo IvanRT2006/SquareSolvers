@@ -19,9 +19,9 @@ int main()
 
     printf("Enter the coefficients of quadratic equation:\n");
 
-    while (scanf("%lf %lf %lf",&a, &b, &c)==3)
+    while (scanf("%lf %lf %lf", &a, &b, &c) == 3)
     {
-        if (CompareEqual(a,0) == true)
+        if (CompareEqual(a, 0) == true)
         {
             LinearEquation(b, c);
             continue;
@@ -69,7 +69,6 @@ void QuadroEquation(double a, double b, double c)
 
         printf("only one root %lf\n", only_one_root);
     }
-
     else
     {
         if (CompareMore(D, 0) == true)
@@ -79,7 +78,6 @@ void QuadroEquation(double a, double b, double c)
 
             printf("Two roots: %lf %lf\n", first_root, second_root);
         }
-
         else
         {
             printf("Oh no!Not roots\n");
