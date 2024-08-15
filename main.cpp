@@ -6,85 +6,112 @@
 
 const double eps = 1e-9;
 
-void LinearEquation(double b, double c);
-void QuadroEquation(double a, double b, double c);
+int SolverLinearEquation(double b, double c, double *x1);
+int SolverQuadroEquation(double a, double b, double c, double *x1, double *x2);
 bool CompareEqual(double a, double b);
 bool CompareMore(double a, double b);
+void GetAnswer(double x1, double x2, int num_roots);
 
 int main()
 {
-    double a = 0;
-    double b = 0;
-    double c = 0;
+    double a, b, c, x1, x2 = 0;
+    int num_roots = 0;
 
-    printf("Enter the coefficients of quadratic equation:\n");
+    printf("Enter the coefficients:\n");
 
-    while (scanf("%lf %lf %lf", &a, &b, &c) == 3)
+    scanf("%lf", &a);
+    scanf("%lf", &b);
+    scanf("%lf", &c);
+
+    if (a == 0)
     {
-        if (CompareEqual(a, 0) == true)
-        {
-            LinearEquation(b, c);
-            continue;
-        }
-        else
-        {
-            QuadroEquation(a, b, c);
-            continue;
-        }
+        num_roots = SolverLinearEquation(b, c, &x1);
     }
 
-    printf("Program ended.");
+    else
+    {
+        num_roots = SolverQuadroEquation(a, b, c, &x1, &x2);
+    }
 
-    return 0;
+  GetAnswer(x1, x2, num_roots);
+
+  printf("Program ended");
+
+  return 0;
 }
 
-void LinearEquation(double b, double c)
+void GetAnswer(double x1, double x2, int num_roots)
 {
+    switch(num_roots)
+    {
+        case -1:
+            printf("Solvers in this equation don't have borders\n");
+            break;
+        case 0:
+            printf("Not solvers in this equation!\n");
+            break;
+        case 2:
+            printf("Two roots: x1 = %lf, x2 = %lf\n", x1, x2);
+            break;
+        case 1:
+            printf("Only one root: x1 = %lf\n", x1);
+            break;
+        case 11:
+            printf("Only one root: x1 = %lf x2 = %lf\n", x1, x2);
+            break;
+    }
+}
+
+int SolverLinearEquation(double b, double c, double *x1)
+{
+    int num_roots = 0;
+
     if (CompareEqual(b, 0) == true)
     {
         if (CompareEqual(c, 0) == true)
         {
-            printf("Solvers in this equation don't have borders\n");
+            num_roots = -1;
         }
         else
         {
-            printf("Not solvers in this equation\n");
+            num_roots = 0;
         }
     }
     else
     {
-        printf("Lineal Equation! Only one root %lf\n", -c / b);
+        num_roots = 1;
+        *x1 = -c/b;
     }
 
-    printf("Enter other coefficients:\n");
+    return num_roots;
 }
 
-void QuadroEquation(double a, double b, double c)
+int SolverQuadroEquation(double a, double b, double c, double *x1, double *x2)
 {
+    int num_roots = 0;
     const double D = b * b - 4 * a * c;
 
     if (CompareEqual(D, 0) == true)
     {
-        const double only_one_root = -b / (2 * a);
-
-        printf("only one root %lf\n", only_one_root);
+         num_roots = 11;
+         *x1 = -b / (2 * a);
+         *x2 = 0;
     }
     else
     {
         if (CompareMore(D, 0) == true)
         {
-            const double first_root = (-b + sqrt(D)) / (2 * a);
-            const double second_root = (-b - sqrt(D)) / (2 * a);
-
-            printf("Two roots: %lf %lf\n", first_root, second_root);
+            num_roots = 2;
+            *x1 = (-b + sqrt(D)) / (2 * a);
+            *x2 = (-b - sqrt(D)) / (2 * a);
         }
         else
         {
-            printf("Oh no!Not roots\n");
+            num_roots = 0;
         }
     }
 
-    printf("Enter other coefficients:\n");
+    return num_roots;
 }
 
 bool CompareEqual(double a, double b)
@@ -93,6 +120,7 @@ bool CompareEqual(double a, double b)
     {
         return true;
     }
+
     else
     {
         return false;
@@ -105,6 +133,7 @@ bool CompareMore(double a, double b)
     {
         return true;
     }
+
     else
     {
         return false;
