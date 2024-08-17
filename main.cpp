@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
+#include <ctype.h>
 
 const double eps = 1e-9;
 
@@ -11,6 +12,7 @@ int SolverQuadroEquation(double a, double b, double c, double *x1, double *x2);
 bool CompareEqual(double a, double b);
 bool CompareMore(double a, double b);
 void GetAnswer(double x1, double x2, int num_roots);
+void InputCoeff(double *coeff);
 
 int main()
 {
@@ -19,9 +21,9 @@ int main()
 
     printf("Enter the coefficients:\n");
 
-    scanf("%lf", &a);
-    scanf("%lf", &b);
-    scanf("%lf", &c);
+    InputCoeff(&a);
+    InputCoeff(&b);
+    InputCoeff(&c);
 
     if (a == 0)
     {
@@ -38,6 +40,19 @@ int main()
   printf("Program ended");
 
   return 0;
+}
+
+void InputCoeff(double *coeff)
+{
+    while (scanf("%lf", coeff) != 1)
+    {
+        int ch = 0;
+
+        while (ch = getchar() != '\n' && ch != EOF)
+        {
+        }
+    printf("Your symbol isn't correct. Try again\n");
+    }
 }
 
 void GetAnswer(double x1, double x2, int num_roots)
