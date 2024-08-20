@@ -6,9 +6,9 @@
 
 const double eps = 1e-9;
 
-enum NumberRoots
+enum NumberRoots   // SolverErrors
 {
-   INF_ROOTS = -1,
+   INF_ROOTS = -1, // UNDEFINED_NUMBER_ROOTS
    NO_ROOTS,
    ONE_ROOT,
    TWO_ROOTS,
@@ -18,7 +18,7 @@ NumberRoots SolverLinearEquation(double b, double c, double *x1);
 NumberRoots SolverQuadroEquation(double a, double b, double c, double *x1, double *x2);
 bool CompareEqual(double a, double b);
 bool CompareMore(double a, double b);
-NumberRoots GetAnswer(double x1, double x2, NumberRoots num_roots);
+void GetAnswer(double x1, double x2, NumberRoots num_roots);
 void InputCoeff(double *coeff);
 void Solver();
 
@@ -31,7 +31,7 @@ int main()
 
 void Solver()
 {
-    double a, b, c, x1 = 0, x2 = 0;
+    double a = 0, b = 0, c = 0, x1 = 0, x2 = 0;  // FIXME, в строку инициализация
     NumberRoots num_roots = NO_ROOTS;
 
     printf("Enter the coefficients:\n");
@@ -40,7 +40,7 @@ void Solver()
     InputCoeff(&b);
     InputCoeff(&c);
 
-    if (a == 0)
+    if (CompareEqual(a, 0) == true)
     {
         num_roots = SolverLinearEquation(b, c, &x1);
     }
@@ -52,7 +52,7 @@ void Solver()
 
     GetAnswer(x1, x2, num_roots);
 
-    printf("Program ended");
+    printf("Program ended\n");
 }
 
 void InputCoeff(double *coeff)
@@ -65,12 +65,12 @@ void InputCoeff(double *coeff)
         {
         }
 
-    printf("Your symbol isn't correct. Try again\n");
+    printf("Your symbol isn't correct. Try again\n"); // fisrt
 
     }
 }
 
-NumberRoots GetAnswer(double x1, double x2, NumberRoots num_roots)
+void GetAnswer(double x1, double x2, NumberRoots num_roots)
 {
     switch(num_roots)
     {
@@ -86,13 +86,14 @@ NumberRoots GetAnswer(double x1, double x2, NumberRoots num_roots)
         case ONE_ROOT:
             printf("Only one root: x1 = %lf\n", x1);
             break;
+        default:
+            // return UNDEFINED_NUMBER_ROOTS;
+            break;  // second
     }
 }
 
 NumberRoots SolverLinearEquation(double b, double c, double *x1)
 {
-    NumberRoots num_roots = INF_ROOTS;
-
     if (CompareEqual(b, 0) == true)
     {
         if (CompareEqual(c, 0) == true)
@@ -106,15 +107,13 @@ NumberRoots SolverLinearEquation(double b, double c, double *x1)
     }
     else
     {
-        *x1 = -c/b;
+        *x1 = -c / b;
         return ONE_ROOT;
-
     }
 }
 
 NumberRoots SolverQuadroEquation(double a, double b, double c, double *x1, double *x2)
 {
-    NumberRoots num_roots = INF_ROOTS;
     const double D = b * b - 4 * a * c;
 
     if (CompareEqual(D, 0) == true)
@@ -143,7 +142,6 @@ bool CompareEqual(double a, double b)
     {
         return true;
     }
-
     else
     {
         return false;
@@ -156,7 +154,6 @@ bool CompareMore(double a, double b)
     {
         return true;
     }
-
     else
     {
         return false;
