@@ -33,25 +33,26 @@ bool CompareEqual(double a, double b);
 bool CompareMore(double a, double b);
 SolverErrors GetAnswer(double x1, double x2, NumberRoots num_roots);
 SolverErrors InputCoeff(double *coeff);
-void Solver();
+void Solver(double a, double b, double c, double x1, double x2);
 
 int main()
 {
-    Solver();
-
-    return 0;
-}
-
-void Solver()
-{
     double a = 0, b = 0, c = 0, x1 = 0, x2 = 0;
-    NumberRoots num_roots = NO_ROOTS;
 
     printf("Enter the coefficients:\n");
 
     GET_ERROR_STRING(InputCoeff(&a));
     GET_ERROR_STRING(InputCoeff(&b));
     GET_ERROR_STRING(InputCoeff(&c));
+
+    Solver(a, b, c, x1, x2);
+
+    return 0;
+}
+
+void Solver(double a, double b, double c, double x1, double x2)
+{
+    NumberRoots num_roots = NO_ROOTS;
 
     if (CompareEqual(a, 0) == true)
     {
