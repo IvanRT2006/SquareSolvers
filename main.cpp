@@ -3,21 +3,36 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
-#include <ctype.h>
 
 const double eps = 1e-9;
 
-int SolverLinearEquation(double b, double c, double *x1);
-int SolverQuadroEquation(double a, double b, double c, double *x1, double *x2);
+enum NumberRoots
+{
+   INF_ROOTS = -1,
+   NO_ROOTS,
+   ONE_ROOT,
+   TWO_ROOTS,
+};
+
+NumberRoots SolverLinearEquation(double b, double c, double *x1);
+NumberRoots SolverQuadroEquation(double a, double b, double c, double *x1, double *x2);
 bool CompareEqual(double a, double b);
 bool CompareMore(double a, double b);
-void GetAnswer(double x1, double x2, int num_roots);
+NumberRoots GetAnswer(double x1, double x2, NumberRoots num_roots);
 void InputCoeff(double *coeff);
+void Solver();
 
 int main()
 {
-    double a, b, c, x1, x2 = 0;
-    int num_roots = 0;
+    Solver();
+
+    return 0;
+}
+
+void Solver()
+{
+    double a, b, c, x1 = 0, x2 = 0;
+    NumberRoots num_roots = NO_ROOTS;
 
     printf("Enter the coefficients:\n");
 
@@ -35,11 +50,9 @@ int main()
         num_roots = SolverQuadroEquation(a, b, c, &x1, &x2);
     }
 
-  GetAnswer(x1, x2, num_roots);
+    GetAnswer(x1, x2, num_roots);
 
-  printf("Program ended");
-
-  return 0;
+    printf("Program ended");
 }
 
 void InputCoeff(double *coeff)
@@ -51,87 +64,82 @@ void InputCoeff(double *coeff)
         while (ch = getchar() != '\n' && ch != EOF)
         {
         }
+
     printf("Your symbol isn't correct. Try again\n");
+
     }
 }
 
-void GetAnswer(double x1, double x2, int num_roots)
+NumberRoots GetAnswer(double x1, double x2, NumberRoots num_roots)
 {
     switch(num_roots)
     {
-        case -1:
+        case INF_ROOTS:
             printf("Solvers in this equation don't have borders\n");
             break;
-        case 0:
+        case NO_ROOTS:
             printf("Not solvers in this equation!\n");
             break;
-        case 2:
+        case TWO_ROOTS:
             printf("Two roots: x1 = %lf, x2 = %lf\n", x1, x2);
             break;
-        case 1:
+        case ONE_ROOT:
             printf("Only one root: x1 = %lf\n", x1);
-            break;
-        case 11:
-            printf("Only one root: x1 = %lf x2 = %lf\n", x1, x2);
             break;
     }
 }
 
-int SolverLinearEquation(double b, double c, double *x1)
+NumberRoots SolverLinearEquation(double b, double c, double *x1)
 {
-    int num_roots = 0;
+    NumberRoots num_roots = INF_ROOTS;
 
     if (CompareEqual(b, 0) == true)
     {
         if (CompareEqual(c, 0) == true)
         {
-            num_roots = -1;
+            return INF_ROOTS;
         }
         else
         {
-            num_roots = 0;
+            return NO_ROOTS;
         }
     }
     else
     {
-        num_roots = 1;
         *x1 = -c/b;
-    }
+        return ONE_ROOT;
 
-    return num_roots;
+    }
 }
 
-int SolverQuadroEquation(double a, double b, double c, double *x1, double *x2)
+NumberRoots SolverQuadroEquation(double a, double b, double c, double *x1, double *x2)
 {
-    int num_roots = 0;
+    NumberRoots num_roots = INF_ROOTS;
     const double D = b * b - 4 * a * c;
 
     if (CompareEqual(D, 0) == true)
     {
-         num_roots = 11;
-         *x1 = -b / (2 * a);
-         *x2 = 0;
+         *x1 = *x2 = -b / (2 * a);
+         return ONE_ROOT;
     }
     else
     {
         if (CompareMore(D, 0) == true)
         {
-            num_roots = 2;
             *x1 = (-b + sqrt(D)) / (2 * a);
             *x2 = (-b - sqrt(D)) / (2 * a);
+            return TWO_ROOTS;
         }
         else
         {
-            num_roots = 0;
+            return NO_ROOTS;
         }
     }
-
-    return num_roots;
 }
 
 bool CompareEqual(double a, double b)
 {
-    if (abs(a - b) < eps)
+    if (fabs(a - b) < eps)
     {
         return true;
     }
