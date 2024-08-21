@@ -17,7 +17,7 @@ enum SolverErrors
         printf("error number %d\n", error);   \
     }
 
-const double eps = 1e-9;
+const double EPS = 1e-9;
 
 enum NumberRoots
 {
@@ -27,45 +27,58 @@ enum NumberRoots
    TWO_ROOTS,
 };
 
-NumberRoots SolverLinearEquation(double b, double c, double *x1);
-NumberRoots SolverQuadroEquation(double a, double b, double c, double *x1, double *x2);
+struct coefficients
+{
+    double a;
+    double b;
+    double c;
+};
+
+struct squares
+{
+    double x1;
+    double x2;
+};
+
+NumberRoots SolverLinearEquation(struct coefficients *abc, struct squares *x1x2);
+NumberRoots SolverQuadroEquation(struct coefficients *abc, struct squares *x1x2);
 bool CompareEqual(double a, double b);
 bool CompareMore(double a, double b);
-SolverErrors GetAnswer(double x1, double x2, NumberRoots num_roots);
+SolverErrors GetAnswer(struct squares *x1x2, NumberRoots num_roots);
 SolverErrors InputCoeff(double *coeff);
-void Solver(double a, double b, double c, double x1, double x2);
+void Solver(struct coefficients *abc, struct squares *x1x2, NumberRoots *num_roots);
 
 int main()
 {
-    double a = 0, b = 0, c = 0, x1 = 0, x2 = 0;
+    struct coefficients abc = {0,0,0};
+    struct squares x1x2 = {0,0};
+
+    NumberRoots num_roots = NO_ROOTS;
 
     printf("Enter the coefficients:\n");
 
-    GET_ERROR_STRING(InputCoeff(&a));
-    GET_ERROR_STRING(InputCoeff(&b));
-    GET_ERROR_STRING(InputCoeff(&c));
+    GET_ERROR_STRING(InputCoeff(&(abc.a)));
+    GET_ERROR_STRING(InputCoeff(&(abc.b)));
+    GET_ERROR_STRING(InputCoeff(&(abc.c)));
 
-    Solver(a, b, c, x1, x2);
+    Solver(&abc, &x1x2,&num_roots);
+    GetAnswer(&x1x2, num_roots);
+
+    printf("Program ended\n");
 
     return 0;
 }
 
-void Solver(double a, double b, double c, double x1, double x2)
+void Solver(struct coefficients *abc, struct squares *x1x2, NumberRoots *num_roots)
 {
-    NumberRoots num_roots = NO_ROOTS;
-
-    if (CompareEqual(a, 0) == true)
+    if (CompareEqual(abc->a, 0) == true)
     {
-        num_roots = SolverLinearEquation(b, c, &x1);
+        *num_roots = SolverLinearEquation(abc, x1x2);
     }
     else
     {
-        num_roots = SolverQuadroEquation(a, b, c, &x1, &x2);
+        *num_roots = SolverQuadroEquation(abc, x1x2);
     }
-
-    GetAnswer(x1, x2, num_roots);
-
-    printf("Program ended\n");
 }
 
 SolverErrors InputCoeff(double *coeff)
@@ -80,21 +93,21 @@ SolverErrors InputCoeff(double *coeff)
         {
         }
 
-    counts_not_error++;
+        counts_not_error++;
 
-    if(counts_not_error == 3)
-    {
-        return READING_ERROR;
-    }
+        if(counts_not_error == 3)
+        {
+            return READING_ERROR;
+        }
 
-    printf("Your symbol isn't correct. Try again\n");
+        printf("Your symbol isn't correct. Try again\n");
 
     }
 
     return NO_SOLVER_ERRORS;
 }
 
-SolverErrors GetAnswer(double x1, double x2, NumberRoots num_roots)
+SolverErrors GetAnswer(struct squares *x1x2, NumberRoots num_roots)
 {
     switch(num_roots)
     {
@@ -105,10 +118,10 @@ SolverErrors GetAnswer(double x1, double x2, NumberRoots num_roots)
             printf("Not solvers in this equation!\n");
             break;
         case TWO_ROOTS:
-            printf("Two roots: x1 = %lf, x2 = %lf\n", x1, x2);
+            printf("Two roots: x1 = %lf, x2 = %lf\n", x1x2->x1, x1x2->x2);
             break;
         case ONE_ROOT:
-            printf("Only one root: x1 = %lf\n", x1);
+            printf("Only one root: x1 = %lf\n", x1x2->x1);
             break;
         default:
             return UNDEFINED_NUMBER_ROOTS;
@@ -119,15 +132,16 @@ SolverErrors GetAnswer(double x1, double x2, NumberRoots num_roots)
 
 }
 
-NumberRoots SolverLinearEquation(double b, double c, double *x1)
+NumberRoots SolverLinearEquation(struct coefficients *abc, struct squares *x1x2)
 {
-    assert(isfinite(b));
-    assert(isfinite(c));
-    assert(x1 != NULL);
+    assert(isfinite(abc->b));
+    assert(isfinite(abc->c));
+    assert(x1x2 != NULL);
+    assert(abc != NULL);
 
-    if (CompareEqual(b, 0) == true)
+    if (CompareEqual(abc->b, 0) == true)
     {
-        if (CompareEqual(c, 0) == true)
+        if (CompareEqual(abc->c, 0) == true)
         {
             return INF_ROOTS;
         }
@@ -138,32 +152,32 @@ NumberRoots SolverLinearEquation(double b, double c, double *x1)
     }
     else
     {
-        *x1 = -c / b;
+        (x1x2->x1) = -(abc->c) / (abc->b);
         return ONE_ROOT;
     }
 }
 
-NumberRoots SolverQuadroEquation(double a, double b, double c, double *x1, double *x2)
+NumberRoots SolverQuadroEquation(struct coefficients *abc, struct squares *x1x2)
 {
-    assert(x1 != NULL);
-    assert(x2 != NULL);
-    assert(isfinite(a));
-    assert(isfinite(b));
-    assert(isfinite(c));
+    assert(x1x2 != NULL);
+    assert(abc != NULL);
+    assert(isfinite(abc->a));
+    assert(isfinite(abc->b));
+    assert(isfinite(abc->c));
 
-    const double D = b * b - 4 * a * c;
+    const double D = (abc->b) * (abc->b) - 4 * (abc->a) * (abc->c);
 
     if (CompareEqual(D, 0) == true)
     {
-         *x1 = *x2 = -b / (2 * a);
+         (x1x2->x1) = (x1x2->x2) = -(abc->b) / (2 * (abc->a));
          return ONE_ROOT;
     }
     else
     {
         if (CompareMore(D, 0) == true)
         {
-            *x1 = (-b + sqrt(D)) / (2 * a);
-            *x2 = (-b - sqrt(D)) / (2 * a);
+            (x1x2->x1) = (-(abc->b) + sqrt(D)) / (2 * (abc->a));
+            (x1x2->x2) = (-(abc->b) - sqrt(D)) / (2 * (abc->a));
             return TWO_ROOTS;
         }
         else
@@ -175,7 +189,7 @@ NumberRoots SolverQuadroEquation(double a, double b, double c, double *x1, doubl
 
 bool CompareEqual(double a, double b)
 {
-    if (fabs(a - b) < eps)
+    if (fabs(a - b) < EPS)
     {
         return true;
     }
@@ -187,7 +201,7 @@ bool CompareEqual(double a, double b)
 
 bool CompareMore(double a, double b)
 {
-    if ((a - b) > eps)
+    if ((a - b) > EPS)
     {
         return true;
     }
