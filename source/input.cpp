@@ -1,7 +1,6 @@
 #include <stdio.h>
-#include "solvers.h"
-#include "input.h"
-#include "TxLib.h"
+#include "..\include\solvers.h"
+#include "..\include\input.h"
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>

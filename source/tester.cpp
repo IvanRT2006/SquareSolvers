@@ -1,8 +1,7 @@
 #include <stdio.h>
-#include "solvers.h"
-#include "tester.h"
-#include "utils.h"
-#include "TxLib.h"
+#include "..\include\solvers.h"
+#include "..\include\tester.h"
+#include "..\include\utils.h"
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>

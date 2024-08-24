@@ -1,9 +1,9 @@
-#include "TxLib.h"
 #include <stdlib.h>
-#include <stdbool.h>
+#include <conio.h>
 #include <math.h>
-#include "solvers.h"
-#include "utils.h"
+#include <assert.h>
+#include "..\include\solvers.h"
+#include "..\include\utils.h"
 
 NumberRoots Solver(struct coefficients *abc, struct squares *x1x2, NumberRoots *num_roots)
 {
@@ -24,16 +24,28 @@ SolverErrors GetAnswer(struct squares *x1x2, NumberRoots num_roots)
     switch(num_roots)
     {
         case INF_ROOTS:
+            Color(BLUE);
             printf("Solvers in this equation don't have borders\n");
+            Color(BASE);
+            getch();
             break;
         case NO_ROOTS:
+            Color(RED);
             printf("Not solvers in this equation!\n");
+            Color(BASE);
+            getch();
             break;
         case TWO_ROOTS:
-            printf("Two roots: x1 = %lf, x2 = %lf\n", x1x2->x1, x1x2->x2);
+            Color(GREEN);
+            printf("Two roots: x1 = %s, x2 = %s\n", x1x2->x1, x1x2->x2);
+            Color(BASE);
+            getch();
             break;
         case ONE_ROOT:
-            printf("Only one root: x1 = %lf\n", x1x2->x1);
+            Color(BLUE);
+            printf("Only one root: x1 = %s\n");
+            Color(BASE);
+            getch();
             break;
         default:
             return UNDEFINED_NUMBER_ROOTS;
@@ -97,4 +109,9 @@ NumberRoots SolverQuadroEquation(struct coefficients *abc, struct squares *x1x2)
             return NO_ROOTS;
         }
     }
+}
+
+void Color(ForegroundColour colour)
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), colour);
 }
