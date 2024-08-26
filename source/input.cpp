@@ -5,6 +5,10 @@
 #include <stdbool.h>
 #include <math.h>
 
+/**
+    \file
+    \brief Файл выполнения функции, проверяющей ошибки ввода.
+*/
 SolverErrors InputCoeff(double *coeff)
 {
     int counts_not_error = 0;

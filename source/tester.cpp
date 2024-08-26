@@ -6,6 +6,11 @@
 #include <stdbool.h>
 #include <math.h>
 
+/**
+    \file
+    \brief Файл с выполнением функции по проверке тестов.
+*/
+
 int Tester(struct SolveTester *ST)
 {
     struct coefficients abc = {0,0,0};

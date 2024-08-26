@@ -7,6 +7,11 @@
 #include "..\include\input.h"
 #include "..\include\tester.h"
 
+/**
+    \file
+    \brief Файл с выполнением функции по решению квадратного уравнения.
+*/
+
 #define GET_ERROR_STRING(error)               \
     if (error != NO_SOLVER_ERRORS)            \
     {                                         \

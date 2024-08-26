@@ -5,6 +5,10 @@
 #include "..\include\solvers.h"
 #include "..\include\utils.h"
 
+/**
+    \file
+    \brief Файл с выполнением функций по возвращению количества корней и вывода корней.
+*/
 NumberRoots Solver(struct coefficients *abc, struct squares *x1x2, NumberRoots *num_roots)
 {
     if (CompareEqual(abc->a, 0) == true)
