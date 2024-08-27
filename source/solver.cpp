@@ -5,9 +5,16 @@
 #include "..\include\solvers.h"
 #include "..\include\utils.h"
 
+#define ASSERT(x) \
+    if (!x) \
+        printf("assertion failed %s file(%s) line: %d", __func__, __FILE__, __LINE__); \
+
+
+
 /**
     \file
-    \brief Файл с выполнением функций по возвращению количества корней и вывода корней.
+    \brief Файл с выполнением функций по возвращению количества корней и вывода корней, а также
+    функции по подсветке.
 */
 NumberRoots Solver(struct coefficients *abc, struct squares *x1x2, NumberRoots *num_roots)
 {
@@ -41,13 +48,13 @@ SolverErrors GetAnswer(struct squares *x1x2, NumberRoots num_roots)
             break;
         case TWO_ROOTS:
             Color(GREEN);
-            printf("Two roots: x1 = %s, x2 = %s\n", x1x2->x1, x1x2->x2);
+            printf("Two roots: x1 = %lf, x2 = %lf\n", x1x2->x1, x1x2->x2);
             Color(BASE);
             getch();
             break;
         case ONE_ROOT:
             Color(BLUE);
-            printf("Only one root: x1 = %s\n");
+            printf("Only one root: x1 = %lf\n", x1x2->x1);
             Color(BASE);
             getch();
             break;
@@ -62,10 +69,10 @@ SolverErrors GetAnswer(struct squares *x1x2, NumberRoots num_roots)
 
 NumberRoots SolverLinearEquation(struct coefficients *abc, struct squares *x1x2)
 {
-    assert(isfinite(abc->b));
-    assert(isfinite(abc->c));
-    assert(x1x2 != NULL);
-    assert(abc != NULL);
+    ASSERT(abc);
+    ASSERT(isfinite(abc->b));
+    ASSERT(isfinite(abc->c));
+    ASSERT(x1x2);
 
     if (CompareEqual(abc->b, 0) == true)
     {
@@ -87,11 +94,11 @@ NumberRoots SolverLinearEquation(struct coefficients *abc, struct squares *x1x2)
 
 NumberRoots SolverQuadroEquation(struct coefficients *abc, struct squares *x1x2)
 {
-    assert(x1x2 != NULL);
-    assert(abc != NULL);
-    assert(isfinite(abc->a));
-    assert(isfinite(abc->b));
-    assert(isfinite(abc->c));
+    ASSERT(x1x2);
+    ASSERT(abc);
+    ASSERT(isfinite(abc->a));
+    ASSERT(isfinite(abc->b));
+    ASSERT(isfinite(abc->c));
 
     const double D = (abc->b) * (abc->b) - 4 * (abc->a) * (abc->c);
 

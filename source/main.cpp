@@ -9,7 +9,7 @@
 
 /**
     \file
-    \brief Файл с выполнением функции по решению квадратного уравнения.
+    \brief Файл с выполнением функций по решению квадратного уравнения.
 */
 
 #define GET_ERROR_STRING(error)               \
@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
         else if (strcmp(argv[1], "--normal") == 0)
         {
             Color(GREEN);
-            printf("Enter the coefficients:");
+            printf("Enter the coefficients:\n");
             Color(BASE);
             getch();
 
@@ -62,10 +62,11 @@ int main(int argc, char *argv[])
             Solver(&abc, &x1x2, &num_roots);
             GetAnswer(&x1x2, num_roots);
         }
-        else
+
+        else if(strcmp(argv[1], "--help") == 0)
         {
             Color(RED);
-            printf("Error. Enter --help for better information\n");
+            printf("Enter --test for revision of tests\n");
             Color(BASE);
             getch();
         }
